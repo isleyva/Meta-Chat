@@ -12,10 +12,9 @@ const ChatInput = () => {
     // input reset handler
 
     const [input, setImput] = useState("");
-    const { data, error, mutate } = useSWR("/api/getMessages", fetcher)
-    console.log(data)
-
-    const addMessage = (e: FormEvent<HTMLFormElement>) => {
+    const { data: messages, error, mutate } = useSWR("/api/getMessages", fetcher)
+    console.log(messages)
+    const addMessage = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!input) return;
         const messageToSend = input;
@@ -33,19 +32,21 @@ const ChatInput = () => {
         }
         // Send message to server
         const uploadMessageToUpstash = async () => {
-            const res = await fetch(
+            const data = await fetch(
                 "/api/addMessage", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ message })
-            }
-            )
-            const data = await res.json()
-            console.log(data)
+            }).then(res => res.json());
+
+            return [data.message, ...messages!]
         }
-        uploadMessageToUpstash()
+        await mutate(uploadMessageToUpstash, {
+            optimisticData: [message, ...messages!],
+            rollbackOnError: true,
+        })
     }
     return (
         <form onSubmit={addMessage} className="fixed flex px-10 py-5 w-full bottom-0 z-50 space-x-2 boder-t border-gray-100">
