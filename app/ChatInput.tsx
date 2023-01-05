@@ -49,7 +49,7 @@ const ChatInput = () => {
         })
     }
     return (
-        <form onSubmit={addMessage} className="fixed flex px-10 py-5 w-full bottom-0 z-50 space-x-2 boder-t border-gray-100">
+        <form onSubmit={addMessage} className="fixed flex px-10 py-5 w-full bottom-0 z-50 space-x-2 boder-t border-gray-100 bg-white">
             <input
                 value={input}
                 onChange={e => setImput(e.target.value)}
