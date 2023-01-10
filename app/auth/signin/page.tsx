@@ -9,7 +9,7 @@ async function SignInPage() {
     return (
         <div className='grid justify-center'>
             <div>
-                <Image src={MessengerLogo} alt={'logo'} width={300} height={300} className="rounded-full mx-2 object-cover"></Image>
+                <Image src={MessengerLogo} alt={'logo'} width={300} height={300} className="rounded-full mx-2 object-cover pt-10"></Image>
             </div>
 
             <SignInComponent providers={providers} />
