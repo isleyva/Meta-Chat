@@ -1,12 +1,16 @@
-import React from "react";
+import { FC } from "react";
 import Image from "next/image";
 import Headerimg from "/public/Headerimg.png";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
-import { unstable_getServerSession } from "next-auth";
+import { Session, unstable_getServerSession } from "next-auth";
 
-async function Header() {
-    const session = await unstable_getServerSession()
+
+interface Props {
+    session: Session | null;
+}
+export const Header: FC<Props> = ({ session }) => {
+
     if (session)
         return (
             <header className="sticky top-0 z-50 bg-white flex justify-between  items-center p-2 shadow-sm">
@@ -44,4 +48,3 @@ async function Header() {
     );
 };
 
-export default Header;
