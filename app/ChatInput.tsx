@@ -2,33 +2,36 @@
 import React, { FormEvent } from "react";
 import { useState } from "react"
 import { v4 as uuidv4 } from 'uuid';
-import Elonphoto from "/public/Elonphoto.png"
 import { Message } from "../typings"
 import useSWR from "swr"
 import fetcher from "../utils/fetchMessages"
+import { Session, unstable_getServerSession } from 'next-auth';
 
-const ChatInput = () => {
-
+export const ChatInput = ({ session }: {
+    session: Session | null;
+}) => {
     // input reset handler
 
     const [input, setImput] = useState("");
     const { data: messages, error, mutate } = useSWR("/api/getMessages", fetcher)
-    console.log(messages)
+
     const addMessage = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!input) return;
+        if (!input || !session) return;
         const messageToSend = input;
         setImput("");
 
         // id for messages
-        const id = uuidv4()
+        const id = uuidv4();
+
         // Message form 
         const message: Message = {
             id,
             message: messageToSend,
             created_at: Date.now(),
-            username: "Elon Musk",
-            profilePic: Elonphoto
+            username: session!.user?.name!,
+            profilePic: session!.user?.image!,
+            email: session!.user?.email!,
         }
         // Send message to server
         const uploadMessageToUpstash = async () => {
@@ -52,6 +55,7 @@ const ChatInput = () => {
         <form onSubmit={addMessage} className="fixed flex px-10 py-5 w-full bottom-0 z-50 space-x-2 boder-t border-gray-100 bg-white">
             <input
                 value={input}
+                disabled={!session}
                 onChange={e => setImput(e.target.value)}
                 type="text"
                 placeholder="Enter message here..."
@@ -68,4 +72,3 @@ const ChatInput = () => {
     );
 };
 
-export default ChatInput;
