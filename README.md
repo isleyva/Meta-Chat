@@ -1,5 +1,5 @@
 Meta-chat
-Meta-chet is a web application built with Next.js and TypeScript, that uses Redis for caching. It provides a simple user interface for managing tasks.
+Meta-chat is a web application built with Next.js and TypeScript, that uses Redis for caching. It provides a simple user interface for managing tasks.
 
 Installation
 To run Meta-chat on your local machine, follow these steps:
